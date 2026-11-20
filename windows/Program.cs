@@ -7,8 +7,8 @@ using System.Windows.Forms;
 
 [assembly: AssemblyTitle("Happy New Island")]
 [assembly: AssemblyDescription("Зимняя панель приложений и воспроизведения Windows")]
-[assembly: AssemblyVersion("1.21.1.0")]
-[assembly: AssemblyFileVersion("1.21.1.0")]
+[assembly: AssemblyVersion("1.21.2.0")]
+[assembly: AssemblyFileVersion("1.21.2.0")]
 
 namespace WinterIsland
 {

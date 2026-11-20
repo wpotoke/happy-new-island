@@ -26,7 +26,7 @@ namespace WinterIsland
         private readonly SnowballToy toy;
         private Stream textureStream, driftStream;
         private Bitmap texture, driftAtlas, trimFrame;
-        private Rectangle firArea;
+        private GarlandLayout trimLayout;
         private Point trimPosition;
         private readonly Random weather = new Random();
         private readonly List<Flake> flakes = new List<Flake>(FlakeLimit);
@@ -40,12 +40,6 @@ namespace WinterIsland
         private Point snowOrigin = new Point(Int32.MinValue, Int32.MinValue);
         private Rectangle capsule, panel;
         private IslandMode mode;
-
-        private static readonly Point[] Lamps =
-        {
-            new Point(228, 263), new Point(1912, 260), new Point(231, 461), new Point(430, 474),
-            new Point(765, 474), new Point(1464, 467), new Point(1694, 469), new Point(1946, 456)
-        };
 
         private static readonly Rectangle LeftDrift = new Rectangle(13, 282, 614, 164);
         private static readonly Rectangle MiddleDrift = new Rectangle(647, 267, 890, 182);
@@ -217,7 +211,6 @@ namespace WinterIsland
             int overhead = mode.Drifts ? Px(19) : margin;
             var point = new Point(capsule.Left - margin, capsule.Top - overhead);
             var size = new Size(width + margin * 2, capsuleHeight + overhead + margin);
-            firArea = new Rectangle(0, overhead - margin, width + 2 * margin, capsuleHeight + 2 * margin);
             bool sameSize = trimFrame != null && size == trimFrame.Size;
             if (sameSize && point == trimPosition && garland.Visible) return;
             trimPosition = point;
@@ -227,8 +220,9 @@ namespace WinterIsland
                 trimFrame = new Bitmap(size.Width, size.Height, PixelFormat.Format32bppPArgb);
                 using (Graphics canvas = Graphics.FromImage(trimFrame))
                 {
-                    if (mode.Garland && texture != null) PaintTrim(canvas, firArea);
-                    if (mode.Drifts && driftAtlas != null) PaintSnowDrifts(canvas, new Rectangle(margin, overhead, width, capsuleHeight));
+                    var edge = new Rectangle(margin, overhead, width, capsuleHeight);
+                    if (mode.Garland && texture != null) PaintTrim(canvas, edge);
+                    if (mode.Drifts && driftAtlas != null) PaintSnowDrifts(canvas, edge);
                 }
             }
             PaintGarland(age.Elapsed.TotalSeconds);
@@ -240,23 +234,20 @@ namespace WinterIsland
             Graphics canvas = garland.Begin(size);
             canvas.DrawImageUnscaled(trimFrame, 0, 0);
             ripplePainted = mode.Garland && time - rippleAt < 1.13;
-            if (mode.Garland && (mode.Glow > 0 || ripplePainted) && texture != null)
+            if (mode.Garland && (mode.Glow > 0 || ripplePainted) && trimLayout != null)
             {
-                int band = Math.Max(8, firArea.Height / 5);
                 canvas.SmoothingMode = SmoothingMode.AntiAlias;
-                for (int i = 0; i < Lamps.Length; i++)
+                for (int i = 0; i < trimLayout.Bulbs.Length; i++)
                 {
-                    Point lamp = Lamps[i];
-                    float fraction = (lamp.X - 62) / 2048f;
-                    float x = fraction * firArea.Width;
-                    float y = lamp.Y < 299 ? firArea.Top + (lamp.Y - 195) * band / 104f : firArea.Bottom - band + (lamp.Y - 432) * band / 96f;
+                    PointF lamp = trimLayout.Bulbs[i];
+                    float fraction = (lamp.X - trimLayout.Capsule.Left) / trimLayout.Capsule.Width;
                     double phase = time * (1.27 + i * .074) + i * 1.9;
                     double wave = .5 + .5 * Math.Sin(phase);
                     float level = (float)((.12 + .88 * wave * wave) * mode.Glow / 100);
                     level = Math.Min(1, level + RippleStrength(time - rippleAt, rippleOrigin, fraction));
                     if (level < .012f) continue;
                     Color light = i == 3 || i == 6 ? Color.FromArgb(255, 105, 110) : Color.FromArgb(255, 175, 73);
-                    Glow(canvas, x, y, light, level);
+                    Glow(canvas, lamp.X, lamp.Y, light, level);
                 }
             }
             garland.Show(trimPosition);
@@ -287,23 +278,28 @@ namespace WinterIsland
                 canvas.FillEllipse(glint, x - scale, y - scale, 2 * scale, 2 * scale);
         }
 
-        private void PaintTrim(Graphics canvas, Rectangle area)
+        private void PaintTrim(Graphics canvas, Rectangle edge)
         {
+            trimLayout = new GarlandLayout(edge, scale);
+            canvas.SmoothingMode = SmoothingMode.AntiAlias;
             canvas.InterpolationMode = InterpolationMode.HighQualityBicubic;
             canvas.PixelOffsetMode = PixelOffsetMode.HighQuality;
-            int band = Math.Max(8, area.Height / 5);
+            using (GraphicsPath shape = Island.Shape(edge, Px(20)))
+            using (var branches = new Pen(GarlandLayout.BranchBase, GarlandLayout.SeamWidth * scale))
+                canvas.DrawPath(branches, shape);
             using (var attributes = new ImageAttributes())
             {
                 attributes.SetWrapMode(WrapMode.TileFlipXY);
-                DrawBand(canvas, new Rectangle(area.Left, area.Top, area.Width, band), 195, 104, attributes);
-                DrawBand(canvas, new Rectangle(area.Left, area.Top + band, area.Width, area.Height - band * 2), 299, 133, attributes);
-                DrawBand(canvas, new Rectangle(area.Left, area.Bottom - band, area.Width, band), 432, 96, attributes);
+                foreach (GarlandLayout.Slice slice in trimLayout.Branches)
+                {
+                    Rectangle source = slice.Source;
+                    RectangleF target = slice.Target;
+                    var pixels = Rectangle.FromLTRB((int)Math.Round(target.Left), (int)Math.Round(target.Top),
+                        (int)Math.Round(target.Right), (int)Math.Round(target.Bottom));
+                    canvas.DrawImage(texture, pixels, source.X, source.Y, source.Width,
+                        source.Height, GraphicsUnit.Pixel, attributes);
+                }
             }
-        }
-
-        private void DrawBand(Graphics canvas, Rectangle area, int sourceY, int sourceHeight, ImageAttributes attributes)
-        {
-            canvas.DrawImage(texture, area, 62, sourceY, 2048, sourceHeight, GraphicsUnit.Pixel, attributes);
         }
 
         private void PaintSnowDrifts(Graphics canvas, Rectangle edge)

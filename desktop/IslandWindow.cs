@@ -102,8 +102,8 @@ internal sealed class IslandWindow : Window
         battery.VerticalAlignment = VerticalAlignment.Center;
         ToolTip.SetTip(battery, Word("Заряд батареи", "Battery charge"));
         Place(fields, battery, 4);
-        var shell = new Border { CornerRadius = new CornerRadius(23), Background = Surface, BorderBrush = Hairline,
-            BorderThickness = new Thickness(1), Margin = new Thickness(7, 13, 7, 5), Child = fields };
+        var shell = new Border { CornerRadius = new CornerRadius(GarlandView.ShellRadius), Background = Surface, BorderBrush = Hairline,
+            BorderThickness = new Thickness(1), Margin = GarlandView.ShellInset, Child = fields };
         var capsule = new Grid { Width = CapsuleWidth, Height = CapsuleHeight, Children = { shell, garland } };
         layout.Children.Add(capsule);
         details = new Border { Width = PanelWidth - 12, Height = PanelHeight - 8, Margin = new Thickness(6, 0, 6, 8),

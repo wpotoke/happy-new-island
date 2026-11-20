@@ -31,9 +31,13 @@ internal static class WinterArt
 
 internal sealed class GarlandView : Control, IDisposable
 {
-    private static readonly double[] LampX = [.08, .165, .33, .525, .742, .89, .966];
+    internal const double ShellRadius = 23;
+    internal static readonly Thickness ShellInset = new(7, 13, 7, 5);
+    private static readonly Pen Branches = new(new SolidColorBrush(Color.FromUInt32((uint)GarlandLayout.BranchBase.ToArgb())),
+        GarlandLayout.SeamWidth);
     private readonly Bitmap garland = WinterArt.Image("garland.png");
     private readonly Bitmap drifts = WinterArt.Image("snowdrift-atlas.png");
+    private GarlandLayout? layout;
     public WinterMode Mode { get; set; }
     public bool Drifts { get; set; }
     public double Moment { get; set; }
@@ -42,23 +46,31 @@ internal sealed class GarlandView : Control, IDisposable
 
     public override void Render(DrawingContext canvas)
     {
-        double width = Bounds.Width;
-        if (width <= 26) return;
-        canvas.DrawImage(garland, new Rect(62, 195, 2048, 104), new Rect(0, 11, width, 12));
-        canvas.DrawImage(garland, new Rect(62, 299, 2048, 133), new Rect(0, 23, width, 27));
-        canvas.DrawImage(garland, new Rect(62, 432, 2048, 96), new Rect(0, 50, width, 10));
+        Rect shell = new Rect(Bounds.Size).Deflate(ShellInset);
+        if (shell.Width < 60 || shell.Height < 16) return;
+        var body = new System.Drawing.RectangleF((float)shell.X, (float)shell.Y, (float)shell.Width, (float)shell.Height);
+        if (layout is null || layout.Capsule != body) layout = new GarlandLayout(body, 1);
+        canvas.DrawRectangle(null, Branches, shell, ShellRadius, ShellRadius);
+        foreach (GarlandLayout.Slice slice in layout.Branches)
+        {
+            var source = slice.Source;
+            var target = slice.Target;
+            canvas.DrawImage(garland, new Rect(source.X, source.Y, source.Width, source.Height),
+                new Rect(target.X, target.Y, target.Width, target.Height));
+        }
         if (Drifts)
         {
             Place(canvas, new Rect(13, 282, 614, 164), .161, .239, 17);
             Place(canvas, new Rect(647, 267, 890, 182), .478, .319, 16);
             Place(canvas, new Rect(1546, 283, 616, 164), .832, .247, 17);
         }
-        for (int i = 0; i < LampX.Length; i++)
+        for (int i = 0; i < layout.Bulbs.Length; i++)
         {
             double glow = (.5 + .5 * Math.Sin(Moment * (1.22 + i * .053) + i * 2.27));
             byte opacity = (byte)(24 + 109 * glow * glow * (Mode == WinterMode.Cozy ? .43 : 1));
-            var tint = new SolidColorBrush(Color.FromArgb(opacity, 255, (byte)(i % 3 == 1 ? 118 : 215), 139));
-            canvas.DrawEllipse(tint, null, new Point(width * LampX[i], i == 5 ? 15 : 54), 1.65, 1.4);
+            var tint = new SolidColorBrush(Color.FromArgb(opacity, 255, (byte)(i is 3 or 6 ? 118 : 215), 139));
+            var bulb = layout.Bulbs[i];
+            canvas.DrawEllipse(tint, null, new Point(bulb.X, bulb.Y), 1.65, 1.4);
         }
     }
 
