@@ -38,11 +38,11 @@ The compact island shows the time, date, battery level when available, and your 
 
 ## Video
 
-[![The leopard reacts to the pointer and sends hearts](preview.gif)](https://github.com/wpotoke/happy-new-island/releases/download/v1.21.1/HappyNewIsland-demo.mp4)
+https://github.com/user-attachments/assets/830508d4-3fea-4ed8-bd1a-c4a1a59ef149
 
-[Watch the full demo · 38 seconds, MP4](https://github.com/wpotoke/happy-new-island/releases/download/v1.21.1/HappyNewIsland-demo.mp4)
+**1:14** · [Download MP4](https://github.com/wpotoke/happy-new-island/releases/download/v1.21.1/HappyNewIsland-full-demo.mp4)
 
-See the leopard walk by the island, respond to petting, eat, curl up for a nap, and wake with a stretch. Then it stalks the pointer and pounces.
+See the leopard walk, send hearts when petted, eat, nap, and pounce after the pointer. At **0:34** a tail tap lights up the garland, at **0:40** the leopard bats a snowball, and at **0:46** the paddle bounces one into the island. At **0:53** the pointer sweeps snow off a window, and at **1:00** the leopard shakes it off its fur. The nap is shortened and snow accumulation is sped up for the demo.
 
 ## Screenshots
 
