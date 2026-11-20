@@ -38,11 +38,17 @@ The compact island shows the time, date, battery level when available, and your 
 
 ## Video
 
-https://github.com/user-attachments/assets/830508d4-3fea-4ed8-bd1a-c4a1a59ef149
+https://github.com/user-attachments/assets/3fdd99ec-0f75-4aaf-bb4d-d0061b96504a
 
-**1:14** · [Download MP4](https://github.com/wpotoke/happy-new-island/releases/download/v1.21.1/HappyNewIsland-full-demo.mp4)
+**1:27** · [Download MP4](https://github.com/wpotoke/happy-new-island/releases/download/v1.21.1/HappyNewIsland-full-demo.mp4)
 
-See the leopard walk, send hearts when petted, eat, nap, and pounce after the pointer. At **0:34** a tail tap lights up the garland, at **0:40** the leopard bats a snowball, and at **0:46** the paddle bounces one into the island. At **0:53** the pointer sweeps snow off a window, and at **1:00** the leopard shakes it off its fur. The nap is shortened and snow accumulation is sped up for the demo.
+The video shows the Windows version. The leopard walks, sends hearts when petted, eats, naps, and pounces after the pointer.
+
+- **0:08** — the island hides when another app overlaps it. **0:10** — hold the pointer at the center of the top edge to bring it back. **0:15** — Ctrl + Alt + G pins the island above the window.
+- **0:47** — a tail tap lights up the garland. **0:53** — the leopard bats a snowball. **0:59** — the paddle game starts, and at **1:01** the snowball bounces off the leopard, who shakes off the snow.
+- **1:06** — snow gathers on a window and you can sweep it away with the pointer. **1:13** — snow gathers on the leopard's fur and it shakes the snow off.
+
+The nap is shortened and snow accumulates faster in the demo.
 
 ## Screenshots
 
