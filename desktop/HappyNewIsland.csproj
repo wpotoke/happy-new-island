@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <AssemblyName>HappyNewIsland</AssemblyName>
+    <RootNamespace>WinterIsland</RootNamespace>
+    <Version>1.21.1</Version>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <DefineConstants>$(DefineConstants);PORTABLE</DefineConstants>
+    <ApplicationIcon>../assets/WinterIsland.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Avalonia.Desktop" Version="11.3.23" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.23" />
+    <Compile Include="../windows/FocusCountdown.cs" Link="Shared/FocusCountdown.cs" />
+    <Compile Include="../windows/LeopardLife.cs" Link="Shared/LeopardLife.cs" />
+    <Compile Include="../windows/LeopardModel.cs" Link="Shared/LeopardModel.cs" />
+    <Compile Include="../windows/LeopardNapSchedule.cs" Link="Shared/LeopardNapSchedule.cs" />
+    <Compile Include="../windows/LeopardPlayMotion.cs" Link="Shared/LeopardPlayMotion.cs" />
+    <Compile Include="../windows/LeopardSkeleton.cs" Link="Shared/LeopardSkeleton.cs" />
+    <EmbeddedResource Include="../assets/leopard-model.bin" LogicalName="WinterIsland.LeopardModel" />
+    <AvaloniaResource Include="../assets/garland.png" Link="Assets/garland.png" />
+    <AvaloniaResource Include="../assets/snowdrift-atlas.png" Link="Assets/snowdrift-atlas.png" />
+    <AvaloniaResource Include="../assets/app-icon.png" Link="Assets/app-icon.png" />
+  </ItemGroup>
+</Project>

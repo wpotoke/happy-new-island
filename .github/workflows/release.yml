@@ -1,0 +1,96 @@
+name: Desktop builds
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    runs-on: windows-2025
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - name: Build and check the Windows app
+        shell: pwsh
+        run: |
+          ./scripts/build-windows.ps1 -Output dist/windows
+          $check = Start-Process -FilePath (Resolve-Path dist/windows/HappyNewIsland.exe) -ArgumentList '--smoke-test' -WindowStyle Hidden -PassThru
+          if (-not $check.WaitForExit(12000)) {
+            Stop-Process -Id $check.Id
+            throw 'Windows app smoke check timed out'
+          }
+          if ($check.ExitCode -ne 0) { throw 'Windows app smoke check failed' }
+          Compress-Archive -LiteralPath dist/windows/HappyNewIsland.exe -DestinationPath dist/HappyNewIsland-Windows-x64.zip
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: windows-x64
+          path: dist/HappyNewIsland-Windows-x64.zip
+          if-no-files-found: error
+
+  portable:
+    name: Build ${{ matrix.runtime }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-24.04
+            runtime: linux-x64
+          - runner: ubuntu-24.04-arm
+            runtime: linux-arm64
+          - runner: macos-15
+            runtime: osx-arm64
+          - runner: macos-15-intel
+            runtime: osx-x64
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
+        with:
+          dotnet-version: '10.0.x'
+      - name: Install Linux display dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y --no-install-recommends xvfb xauth libx11-6 libxfixes3 libfontconfig1 libice6 libsm6
+      - name: Publish, launch and package
+        shell: bash
+        env:
+          RUNTIME: ${{ matrix.runtime }}
+        run: bash scripts/package-desktop.sh "$RUNTIME" dist
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: ${{ matrix.runtime }}
+          path: dist/HappyNewIsland-*
+          if-no-files-found: error
+
+  release:
+    if: github.ref_type == 'tag' && startsWith(github.ref_name, 'v')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    needs: [windows, portable]
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          path: release-files
+          merge-multiple: true
+      - name: Publish the checksums and downloads
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          files=(release-files/HappyNewIsland-*)
+          [[ "${#files[@]}" -eq 5 ]]
+          (cd release-files && sha256sum HappyNewIsland-* > SHA256SUMS.txt)
+          gh release create "$RELEASE_TAG" --verify-tag --title "Happy New Island $RELEASE_TAG" \
+            --notes-file .github/RELEASE.md "${files[@]}" release-files/SHA256SUMS.txt

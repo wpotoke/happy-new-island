@@ -1,0 +1,10 @@
+.build-tools/
+artifacts/
+dist/
+**/bin/
+**/obj/
+*.user
+*.pfx
+*.p12
+*.exe
+.DS_Store
