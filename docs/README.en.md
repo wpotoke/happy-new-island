@@ -38,9 +38,9 @@ The compact island shows the time, date, battery level when available, and your 
 
 ## Video
 
-https://github.com/user-attachments/assets/3fdd99ec-0f75-4aaf-bb4d-d0061b96504a
+https://github.com/user-attachments/assets/5e9868b6-aeb8-4de6-932a-192f50e4ed17
 
-**1:27** · [Download MP4](https://github.com/wpotoke/happy-new-island/releases/download/v1.21.1/HappyNewIsland-full-demo.mp4)
+**1:27** · [Download MP4](https://github.com/wpotoke/happy-new-island/releases/download/v1.21.2/HappyNewIsland-full-demo.mp4)
 
 The video shows the Windows version. The leopard walks, sends hearts when petted, eats, naps, and pounces after the pointer.
 
