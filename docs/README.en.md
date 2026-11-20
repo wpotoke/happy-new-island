@@ -2,9 +2,9 @@
 
 **A little New Year’s gift for your desktop.** A snow-covered island at the top of your screen, with a tiny 3D snow leopard that wanders, naps beside it, and throws hearts when you pet it.
 
-[Русский](../README.md) · [Latest release](https://github.com/wpotoke/happy-new-island/releases/latest)
+[Русский](../README.md) · [Latest release](https://github.com/wpotoke/happy-new-island/releases/latest) · [Video](#video)
 
-![Snow-covered island with garland, a clock, and a snow leopard sitting beside it](island.png)
+![Snow-covered island with garland, a clock and a snow leopard on the desktop](screenshots/desktop.png)
 
 ## Download
 
@@ -38,9 +38,19 @@ The compact island shows the time, date, battery level when available, and your 
 
 ## Video
 
-A short tour of the island and the leopard will go here.
+[![The leopard reacts to the pointer and sends hearts](preview.gif)](https://github.com/wpotoke/happy-new-island/releases/download/v1.21.1/HappyNewIsland-demo.mp4)
 
-<!-- demo-video: replace this line with the finished video link -->
+[Watch the full demo · 38 seconds, MP4](https://github.com/wpotoke/happy-new-island/releases/download/v1.21.1/HappyNewIsland-demo.mp4)
+
+See the leopard walk by the island, respond to petting, eat, curl up for a nap, and wake with a stretch. Then it stalks the pointer and pounces.
+
+## Screenshots
+
+![The leopard tab with feeding and play controls and a snow leopard sitting to its right](screenshots/companion.png)
+
+| Winter modes | Focus timer |
+| --- | --- |
+| ![Holiday, Cozy and Focus presets](screenshots/modes.png) | ![Custom focus timer with pause and a progress bar](screenshots/timer.png) |
 
 ## Source
 

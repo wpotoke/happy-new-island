@@ -2,9 +2,9 @@
 
 **Новогодний подгон для рабочего стола.** Заснеженный остров у верхнего края экрана и маленький 3D-барс, который гуляет, засыпает рядом и радуется, когда его гладишь.
 
-[English](docs/README.en.md) · [Последний релиз](https://github.com/wpotoke/happy-new-island/releases/latest)
+[English](docs/README.en.md) · [Последний релиз](https://github.com/wpotoke/happy-new-island/releases/latest) · [Видео](#видео)
 
-![Заснеженный остров с гирляндой, часами и сидящим рядом снежным барсом](docs/island.png)
+![Заснеженный остров с гирляндой, часами и снежным барсом на экране](docs/screenshots/desktop.png)
 
 ## Скачать
 
@@ -38,9 +38,19 @@
 
 ## Видео
 
-Здесь появится короткий ролик с островом и барсом.
+[![Барс реагирует на курсор и пускает сердечки](docs/preview.gif)](https://github.com/wpotoke/happy-new-island/releases/download/v1.21.1/HappyNewIsland-demo.mp4)
 
-<!-- demo-video: вставь ссылку на свой ролик здесь и в docs/README.en.md -->
+[Смотреть полный ролик · 38 секунд, MP4](https://github.com/wpotoke/happy-new-island/releases/download/v1.21.1/HappyNewIsland-demo.mp4)
+
+В ролике барс гуляет у острова, радуется поглаживанию, ест, сворачивается клубком и просыпается с потягиванием. В конце он крадётся за курсором и прыгает.
+
+## Скриншоты
+
+![Вкладка барса с кормлением и игрой, справа сидит снежный барс](docs/screenshots/companion.png)
+
+| Режимы оформления | Таймер фокуса |
+| --- | --- |
+| ![Режимы Праздник, Уют и Фокус](docs/screenshots/modes.png) | ![Настраиваемый таймер с паузой и полоской прогресса](docs/screenshots/timer.png) |
 
 ## Исходники
 
